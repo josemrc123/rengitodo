@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31605.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rengitodo.common", "rengitodo.common\rengitodo.common.csproj", "{04F20A28-92F3-471A-9D04-E3974605B72F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rengitodo.common", "rengitodo.common\rengitodo.common.csproj", "{04F20A28-92F3-471A-9D04-E3974605B72F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rengitodo.Functions", "rengitodo.Functions\rengitodo.Functions.csproj", "{3DC5DC6E-D59E-45DA-9C46-3F1998694C33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rengitodo.Functions", "rengitodo.Functions\rengitodo.Functions.csproj", "{3DC5DC6E-D59E-45DA-9C46-3F1998694C33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rengitodo.Test", "rengitodo.Test\rengitodo.Test.csproj", "{62466934-A9BC-4ECA-AC05-A2F65CBE3CB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rengitodo.Test", "rengitodo.Test\rengitodo.Test.csproj", "{62466934-A9BC-4ECA-AC05-A2F65CBE3CB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
