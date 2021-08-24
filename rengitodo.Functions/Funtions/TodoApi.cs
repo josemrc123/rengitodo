@@ -24,9 +24,9 @@ namespace rengitodo.Functions.Funtions
         {
             log.LogInformation("received a new todo.");
 
+            // CREATE TODO
 
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync(); //validate body of querystring
             Todo todo = JsonConvert.DeserializeObject<Todo>(requestBody);
             if (string.IsNullOrEmpty(todo?.TaskDescription))
             {
@@ -111,6 +111,90 @@ namespace rengitodo.Functions.Funtions
                 Result = todoEntity
             });
         }
+
+        [FunctionName(nameof(GetAllTodos))]
+        public static async Task<IActionResult> GetAllTodos(
+               [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "todo")] HttpRequest req,
+               [Table("todo", Connection = "AzureWebJobsStorage")] CloudTable TodoTable,
+               ILogger log)
+        {
+            log.LogInformation("rget all todos received.");
+
+            TableQuery<TodoEntity> query = new TableQuery<TodoEntity>();
+            TableQuerySegment<TodoEntity> todos = await TodoTable.ExecuteQuerySegmentedAsync(query, null);
+
+
+            string message = "NRetrieved all todos.";
+            log.LogInformation(message);
+
+            return new OkObjectResult(new Response
+            {
+                IsSuccess = true,
+                Message = message,
+                Result = todos
+            });
+        }
+
+        [FunctionName(nameof(GetTodoById))]
+        public static IActionResult GetTodoById(
+                  [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "todo/{id}")] HttpRequest req,
+                  [Table("todo", "TODO", "{id}", Connection = "AzureWebJobsStorage")] TodoEntity todoEntity,
+                  string id,
+                  ILogger log)
+        {
+            log.LogInformation($"get todo by id: {id},  received.");
+
+            if (todoEntity == null)
+            {
+                return new BadRequestObjectResult(new Response
+                {
+                    IsSuccess = false,
+                    Message = "todo not foud"
+                });
+            }
+
+
+            string message = $" todo: {todoEntity.RowKey}, retrieved.";
+            log.LogInformation(message);
+
+            return new OkObjectResult(new Response
+            {
+                IsSuccess = true,
+                Message = message,
+                Result = todoEntity
+            });
+        }
+
+        [FunctionName(nameof(DeleteTodo))]
+        public static async Task<IActionResult> DeleteTodo(
+                      [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "todo/{id}")] HttpRequest req,
+                      [Table("todo", "TODO", "{id}", Connection = "AzureWebJobsStorage")] TodoEntity todoEntity,
+                       [Table("todo", Connection = "AzureWebJobsStorage")] CloudTable TodoTable,
+                      string id,
+                      ILogger log)
+        {
+            log.LogInformation($"delete todo: {id},  received.");
+
+            if (todoEntity == null)
+            {
+                return new BadRequestObjectResult(new Response
+                {
+                    IsSuccess = false,
+                    Message = "todo not foud"
+                });
+            }
+            await TodoTable.ExecuteAsync(TableOperation.Delete(todoEntity)); 
+
+            string message = $" todo: {todoEntity.RowKey}, retrieved.";
+            log.LogInformation(message);
+
+            return new OkObjectResult(new Response
+            {
+                IsSuccess = true,
+                Message = message,
+                Result = todoEntity
+            });
+        }
     }
-}
+} 
 
